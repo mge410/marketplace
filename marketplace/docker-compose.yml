@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   web:
+    container_name: backend
     build: .
     ports:
       - "8000:8000"
@@ -13,6 +14,7 @@ services:
       - .:/app
 
   db:
+    container_name: db
     image: postgres:17
     environment:
       - POSTGRES_USER=postgres
