@@ -26,20 +26,13 @@ async def register(
 ) -> dict[str, bool]:
     try:
         token_info = await service.register_user(user)
+        await set_access_cookie(response, token_info)
 
-        response.set_cookie(
-            key="access_token",
-            value=f"{token_info.token_type} {token_info.token}",
-            max_age=token_info.max_age,
-            httponly=True,
-            secure=True,
-            samesite="lax"
-        )
+        return {"success": True}
 
     except MultipleValidationException as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=e.to_response())
 
-    return {"success": True}
 
 
 @router.post("/login")
@@ -50,14 +43,7 @@ async def login(
 ) -> TokenInfo:
     try:
         token_info = await service.login(user)
-        response.set_cookie(
-            key="access_token",
-            value=f"{token_info.token_type} {token_info.token}",
-            max_age=token_info.max_age,
-            httponly=True,
-            secure=True,
-            samesite="lax"
-        )
+        await set_access_cookie(response, token_info)
 
         return token_info
 
@@ -71,3 +57,13 @@ async def login(
 @router.post("/logout")
 async def logout():
     return {"message": "Hello Logout"}
+
+async def set_access_cookie(response, token_info):
+    response.set_cookie(
+        key="access_token",
+        value=f"{token_info.token_type} {token_info.token}",
+        max_age=token_info.max_age,
+        httponly=True,
+        secure=True,
+        samesite="lax"
+    )

@@ -17,7 +17,7 @@ class RegisterRepositoryImpl(RegisterRepository):
     async def create_user(
             self,
             user_data: RegisterUserSchema,
-    ) -> None:
+    ) -> UserModel:
         await self._check_unique_user(user_data)
         user = UserModel(
             **user_data.model_dump(exclude={'password'}),
@@ -25,6 +25,7 @@ class RegisterRepositoryImpl(RegisterRepository):
         )
         self.session.add(user)
         await self.session.commit()
+        return user
 
     async def _check_unique_user(self, user_data):
         errors = []

@@ -6,7 +6,7 @@ from src.auth.schemes.login_user import TokenPayload, TokenInfo
 from src.core.config import settings
 from src.core.database import UserModel
 
-async def create_jwt_token(user):
+async def create_jwt_token(user: UserModel) -> TokenInfo:
     max_age = settings.auth_jwt.access_token_expire_minutes
     token = generate_token_info(user, settings.auth_jwt.access_token_expire_minutes)
     token_info = TokenInfo(
