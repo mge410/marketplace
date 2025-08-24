@@ -8,7 +8,9 @@ class RegisterService:
     def __init__(self, repository: RegisterRepository):
         self.repository = repository
 
-    async def register_user(self, user: RegisterUserSchema) -> TokenInfo:
-        user = await self.repository.create_user(user)
-        token_info = await jwt_utils.create_jwt_token(user)
+    async def register_user(
+        self, register_user_schema: RegisterUserSchema
+    ) -> TokenInfo:
+        user_model = await self.repository.create_user(register_user_schema)
+        token_info = await jwt_utils.create_jwt_token(user_model)
         return token_info

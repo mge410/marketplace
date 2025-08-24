@@ -10,5 +10,7 @@ class LoginRepository(ABC):
         pass
 
     @abstractmethod
-    async def check_user_password(self, user: UserModel, user_login_data: LoginUserSchema) -> bool:
+    async def check_user_password(
+        self, user: UserModel, user_login_data: LoginUserSchema
+    ) -> bool:
         pass

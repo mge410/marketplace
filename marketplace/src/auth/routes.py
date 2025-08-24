@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, HTTPException, Response
 from fastapi.params import Depends
 from starlette import status
+from starlette.responses import JSONResponse
 
 from src.auth.dependencies.register import register_service, login_service
 from src.auth.exceptions.IncorrectPasswordException import IncorrectPasswordException
@@ -18,11 +19,12 @@ router = APIRouter(
     tags=["auth"],
 )
 
+
 @router.post("/register")
 async def register(
-        user: RegisterUserSchema,
-        service: Annotated[RegisterService, Depends(register_service)],
-        response: Response
+    user: RegisterUserSchema,
+    service: Annotated[RegisterService, Depends(register_service)],
+    response: Response,
 ) -> dict[str, bool]:
     try:
         token_info = await service.register_user(user)
@@ -31,15 +33,16 @@ async def register(
         return {"success": True}
 
     except MultipleValidationException as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=e.to_response())
-
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail=e.to_response()
+        )
 
 
 @router.post("/login")
 async def login(
     user: LoginUserSchema,
     service: Annotated[LoginService, Depends(login_service)],
-    response: Response
+    response: Response,
 ) -> TokenInfo:
     try:
         token_info = await service.login(user)
@@ -48,22 +51,37 @@ async def login(
         return token_info
 
     except UserNotFoundException:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
     except IncorrectPasswordException:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Incorrect password")
-
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Incorrect password"
+        )
 
 
 @router.post("/logout")
-async def logout():
-    return {"message": "Hello Logout"}
+async def logout(response: Response) -> JSONResponse:
+    response.delete_cookie(
+        key="access_token",
+        path="/",
+        domain=None,
+        secure=True,
+        httponly=True,
+        samesite="lax",
+    )
 
-async def set_access_cookie(response, token_info):
+    return JSONResponse(
+        content={"message": "Successfully logged out"}, status_code=status.HTTP_200_OK
+    )
+
+
+async def set_access_cookie(response: Response, token_info: TokenInfo) -> None:
     response.set_cookie(
         key="access_token",
         value=f"{token_info.token_type} {token_info.token}",
         max_age=token_info.max_age,
         httponly=True,
         secure=True,
-        samesite="lax"
+        samesite="lax",
     )

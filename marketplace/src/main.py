@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+from typing import AsyncIterator
 
 import uvicorn
 from fastapi import FastAPI
@@ -6,10 +7,10 @@ from fastapi import FastAPI
 from src.core.database import db_helper
 from src.core.config import settings
 from src.auth import auth_router
-from src.core.database.models import UserModel
+
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     yield
     await db_helper.dispose()
 

@@ -5,6 +5,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+
 class RunConfig(BaseModel):
     host: str = "0.0.0.0"
     port: int = 8000
@@ -14,6 +15,7 @@ class RunConfig(BaseModel):
 
 class ApiPrefix(BaseModel):
     api_prefix: str = "/api"
+
 
 class AuthJWT(BaseModel):
     private_key_path: Path = BASE_DIR / "certs" / "jwt-private.pem"
@@ -34,7 +36,7 @@ class DatabaseConfig(BaseModel):
         "uq": "uq_%(table_name)s_%(column_0_N_name)s",
         "ck": "ck_%(table_name)s_%(constraint_name)s",
         "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
-        "pk": "pk_%(table_name)s"
+        "pk": "pk_%(table_name)s",
     }
 
 
@@ -51,4 +53,4 @@ class Settings(BaseSettings):
     auth_jwt: AuthJWT = AuthJWT()
 
 
-settings = Settings()
+settings = Settings.model_validate({})
