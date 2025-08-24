@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from pydantic import PostgresDsn, BaseModel
+from pydantic import PostgresDsn, BaseModel, AmqpDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -23,6 +23,10 @@ class AuthJWT(BaseModel):
     algorithm: str = "RS256"
     token_type: str = "Bearer"
     access_token_expire_minutes: int = 5
+
+class FastStreamConfig(BaseModel):
+    url: AmqpDsn = "amqp://guest:guest@localhost:5672/"
+    user_registered_event = "user-registered"
 
 
 class DatabaseConfig(BaseModel):
@@ -50,6 +54,7 @@ class Settings(BaseSettings):
     run: RunConfig = RunConfig()
     api: ApiPrefix = ApiPrefix()
     db: DatabaseConfig
+    faststream: FastStreamConfig = FastStreamConfig()
     auth_jwt: AuthJWT = AuthJWT()
 
 

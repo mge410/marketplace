@@ -7,12 +7,15 @@ from fastapi import FastAPI
 from src.core.database import db_helper
 from src.core.config import settings
 from src.auth import auth_router
+from src.core.fs_broker import broker
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    await broker.start()
     yield
     await db_helper.dispose()
+    await broker.stop()
 
 
 main_app = FastAPI(
