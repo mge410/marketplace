@@ -15,9 +15,9 @@ class RegisterService:
     ) -> TokenInfo:
         user_model = await self.repository.create_user(register_user_schema)
         token_info = await jwt_utils.create_jwt_token(user_model)
-        # broker.publish(
-        #     subject=settings.faststream.user_registered_event,
-        #     message=user_model.email,
-        # )
+        await broker.publish(
+            routing_key=settings.faststream.user_registered_event,
+            message=user_model.email,
+        )
 
         return token_info

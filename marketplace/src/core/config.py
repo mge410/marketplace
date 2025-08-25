@@ -24,9 +24,10 @@ class AuthJWT(BaseModel):
     token_type: str = "Bearer"
     access_token_expire_minutes: int = 5
 
+
 class FastStreamConfig(BaseModel):
-    url: AmqpDsn = "amqp://guest:guest@localhost:5672/"
-    user_registered_event = "user-registered"
+    url: AmqpDsn = AmqpDsn("amqp://guest:guest@rabbitmq:5672/")
+    user_registered_event: str = "user-registered"
 
 
 class DatabaseConfig(BaseModel):
