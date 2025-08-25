@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from pydantic import PostgresDsn, BaseModel, AmqpDsn
+from pydantic import PostgresDsn, BaseModel, AmqpDsn, EmailStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -29,6 +29,11 @@ class FastStreamConfig(BaseModel):
     url: AmqpDsn = AmqpDsn("amqp://guest:guest@rabbitmq:5672/")
     user_registered_event: str = "user-registered"
 
+class EmailConfig(BaseModel):
+    admin_email: EmailStr = "admin@marketplace.com"
+    smtp_host: str = "maildev"
+    smtp_port: int = 1025
+
 
 class DatabaseConfig(BaseModel):
     url: PostgresDsn
@@ -52,6 +57,7 @@ class Settings(BaseSettings):
         env_nested_delimiter="__",
         env_prefix="APP_CONFIG__",
     )
+    email_config: EmailConfig = EmailConfig()
     run: RunConfig = RunConfig()
     api: ApiPrefix = ApiPrefix()
     db: DatabaseConfig

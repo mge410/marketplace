@@ -3,7 +3,7 @@ from src.auth.repositories.register import RegisterRepository
 from src.auth.schemes.login_user import TokenInfo
 from src.auth.schemes.register_user import RegisterUserSchema
 from src.core.config import settings
-from src.core.fs_broker import broker
+from src.core.fast_stream.fs_broker import broker
 
 
 class RegisterService:

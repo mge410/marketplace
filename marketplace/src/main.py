@@ -7,8 +7,8 @@ from fastapi import FastAPI
 from src.auth import auth_router
 from src.core.config import settings
 from src.core.database import db_helper
-from src.core.fs_broker import broker
-from src.core.fs_subs import router as subs_router
+from src.core.fast_stream.fs_broker import broker
+from src.core.fast_stream.fs_subs import router as subs_router
 from src.core.logger import setup_exception_handlers
 
 
