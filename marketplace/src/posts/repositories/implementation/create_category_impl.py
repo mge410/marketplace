@@ -10,6 +10,12 @@ class CreateCategoryImpl(CreateCategory):
         self.session = session
 
     async def create_category(
-        self, email: CreateCategorySchema
+        self, data: CreateCategorySchema
     ) -> CategoryModel | None:
-        pass
+        category = CategoryModel(
+            **data.model_dump(),
+        )
+        self.session.add(category)
+        await self.session.commit()
+
+        return category

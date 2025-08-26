@@ -22,7 +22,7 @@ class AuthJWT(BaseModel):
     public_key_path: Path = BASE_DIR / "certs" / "jwt-public.pem"
     algorithm: str = "RS256"
     token_type: str = "Bearer"
-    access_token_expire_minutes: int = 5
+    access_token_expire_minutes: int = 30
 
 
 class FastStreamConfig(BaseModel):

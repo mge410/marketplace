@@ -8,5 +8,5 @@ class CreateCategory:
     def __init__(self, repository: CreateCategoryRepository):
         self.repository = repository
 
-    def create_category(self, email: CreateCategorySchema) -> None:
-        pass
+    async def create_category(self, data: CreateCategorySchema) -> None:
+       await self.repository.create_category(data)

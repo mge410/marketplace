@@ -4,10 +4,8 @@ from src.core.config import settings
 
 
 class LoginUserSchema(BaseModel):
-    email: EmailStr = Field(..., description="Уникальный email пользователя")
-    password: str = Field(
-        ..., description="Пароль (6-16 символа)", min_length=6, max_length=16
-    )
+    email: EmailStr = Field(description="Уникальный email пользователя")
+    password: str = Field(description="Пароль (6-16 символа)", min_length=6, max_length=16)
 
     class Config:
         json_schema_extra = {
@@ -20,7 +18,7 @@ class LoginUserSchema(BaseModel):
 
 class TokenPayload(BaseModel):
     sub: str
-    id: int
+    uuid: str
     email: str
     name: str
     phone: str
