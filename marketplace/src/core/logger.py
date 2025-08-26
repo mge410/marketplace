@@ -20,7 +20,7 @@ def setup_exception_handlers(app: FastAPI) -> None:
         retention="10 days",
         format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}",
         level="DEBUG",
-        filter=lambda record: record["level"].name not in ["ERROR", "CRITICAL"]
+        filter=lambda record: record["level"].name not in ["ERROR", "CRITICAL"],
     )
 
     @app.exception_handler(Exception)

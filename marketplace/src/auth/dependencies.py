@@ -3,20 +3,20 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.auth.repositories.implementation import LoginRepositoryImpl
 from src.auth.repositories.implementation import RegisterRepositoryImpl
-from src.auth.services.login import LoginService
-from src.auth.services.register import RegisterService
+from src.auth.use_cases.login import LoginUseCase
+from src.auth.use_cases.register import RegisterUseCase
 from src.core.database import db_helper
 
 
-def register_service(
+def register_use_case(
     session: AsyncSession = Depends(db_helper.get_session),
-) -> RegisterService:
+) -> RegisterUseCase:
     repository = RegisterRepositoryImpl(session)
-    return RegisterService(repository)
+    return RegisterUseCase(repository)
 
 
-def login_service(
+def login_use_case(
     session: AsyncSession = Depends(db_helper.get_session),
-) -> LoginService:
+) -> LoginUseCase:
     repository = LoginRepositoryImpl(session)
-    return LoginService(repository)
+    return LoginUseCase(repository)

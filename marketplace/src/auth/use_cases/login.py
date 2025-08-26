@@ -5,7 +5,7 @@ from src.auth.repositories.login import LoginRepository
 from src.auth.schemes.login_user import LoginUserSchema, TokenInfo
 
 
-class LoginService:
+class LoginUseCase:
     def __init__(self, repository: LoginRepository):
         self.repository = repository
 

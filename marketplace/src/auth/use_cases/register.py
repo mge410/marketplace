@@ -6,7 +6,7 @@ from src.core.config import settings
 from src.core.fast_stream.fs_broker import broker
 
 
-class RegisterService:
+class RegisterUseCase:
     def __init__(self, repository: RegisterRepository):
         self.repository = repository
 

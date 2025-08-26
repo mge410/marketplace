@@ -5,14 +5,14 @@ from fastapi.params import Depends
 from starlette import status
 from starlette.responses import JSONResponse
 
-from src.auth.dependencies.register import register_service, login_service
+from src.auth.dependencies import register_use_case, login_use_case
 from src.auth.exceptions.IncorrectPasswordException import IncorrectPasswordException
 from src.auth.exceptions.MultipleValidationException import MultipleValidationException
 from src.auth.exceptions.UserNotFoundException import UserNotFoundException
 from src.auth.schemes.login_user import LoginUserSchema, TokenInfo
 from src.auth.schemes.register_user import RegisterUserSchema
-from src.auth.services.login import LoginService
-from src.auth.services.register import RegisterService
+from src.auth.use_cases.login import LoginUseCase
+from src.auth.use_cases.register import RegisterUseCase
 
 router = APIRouter(
     prefix="/auth",
@@ -23,11 +23,11 @@ router = APIRouter(
 @router.post("/register")
 async def register(
     user: RegisterUserSchema,
-    service: Annotated[RegisterService, Depends(register_service)],
+    use_case: Annotated[RegisterUseCase, Depends(register_use_case)],
     response: Response,
 ) -> dict[str, bool]:
     try:
-        token_info = await service.register_user(user)
+        token_info = await use_case.register_user(user)
         await set_access_cookie(response, token_info)
 
         return {"success": True}
@@ -41,11 +41,11 @@ async def register(
 @router.post("/login")
 async def login(
     user: LoginUserSchema,
-    service: Annotated[LoginService, Depends(login_service)],
+    use_case: Annotated[LoginUseCase, Depends(login_use_case)],
     response: Response,
 ) -> TokenInfo:
     try:
-        token_info = await service.login(user)
+        token_info = await use_case.login(user)
         await set_access_cookie(response, token_info)
 
         return token_info

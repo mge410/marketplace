@@ -1,8 +1,13 @@
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import String
 import uuid
+from typing import TYPE_CHECKING
+
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from ..helpers.base_model import BaseModel
+
+if TYPE_CHECKING:
+    from .. import PostModel
 
 
 class UserModel(BaseModel):
@@ -16,3 +21,5 @@ class UserModel(BaseModel):
     uuid: Mapped[str] = mapped_column(
         String(36), unique=True, default=lambda: str(uuid.uuid4())
     )
+
+    posts: Mapped[list["PostModel"]] = relationship(back_populates="author")

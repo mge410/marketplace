@@ -29,6 +29,7 @@ class FastStreamConfig(BaseModel):
     url: AmqpDsn = AmqpDsn("amqp://guest:guest@rabbitmq:5672/")
     user_registered_event: str = "user-registered"
 
+
 class EmailConfig(BaseModel):
     admin_email: EmailStr = "admin@marketplace.com"
     smtp_host: str = "maildev"
