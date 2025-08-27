@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Optional
 from typing import TYPE_CHECKING
 
 from sqlalchemy import String, Text, DateTime, ForeignKey
@@ -28,7 +27,7 @@ class PostModel(BaseModel):
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
 
-    category_id: Mapped[Optional[int]] = mapped_column(ForeignKey("categories.id"))
+    category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
     category: Mapped["CategoryModel"] = relationship(back_populates="posts")
 
     author_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
