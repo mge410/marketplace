@@ -4,7 +4,7 @@ import bcrypt
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.auth.exceptions.MultipleValidationException import (
+from src.auth.exceptions.multiple_validation_exception import (
     MultipleValidationException,
     ValidationError,
 )

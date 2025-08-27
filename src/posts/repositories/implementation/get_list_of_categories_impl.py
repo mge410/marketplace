@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.core.database import CategoryModel
 from src.posts.repositories.get_list_of_categories import GetListOfCategories
 
+
 class GetListOfCategoriesImpl(GetListOfCategories):
     def __init__(self, session: AsyncSession):
         self.session = session

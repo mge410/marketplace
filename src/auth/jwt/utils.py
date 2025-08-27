@@ -11,7 +11,9 @@ from src.core.schemes.user_scheme import UserSchema
 
 async def create_jwt_token(user: UserModel) -> TokenInfo:
     max_age = settings.auth_jwt.access_token_expire_minutes
-    token = await generate_token_info(user, settings.auth_jwt.access_token_expire_minutes)
+    token = await generate_token_info(
+        user, settings.auth_jwt.access_token_expire_minutes
+    )
     token_info = TokenInfo(
         token=token, token_type=settings.auth_jwt.token_type, max_age=max_age
     )

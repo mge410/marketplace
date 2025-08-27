@@ -5,7 +5,9 @@ from src.core.config import settings
 
 class LoginUserSchema(BaseModel):
     email: EmailStr = Field(description="Уникальный email пользователя")
-    password: str = Field(description="Пароль (6-16 символа)", min_length=6, max_length=16)
+    password: str = Field(
+        description="Пароль (6-16 символа)", min_length=6, max_length=16
+    )
 
     class Config:
         json_schema_extra = {

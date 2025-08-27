@@ -2,10 +2,14 @@ from fastapi import Depends, HTTPException, status, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from src.auth.jwt.utils import decode_jwt_token
+from src.core.schemes.user_scheme import UserSchema
 
 security = HTTPBearer()
 
-async def get_current_user(request: Request, credentials: HTTPAuthorizationCredentials = Depends(security)):
+
+async def get_current_user(
+    request: Request, credentials: HTTPAuthorizationCredentials = Depends(security)
+) -> UserSchema:
     token = request.cookies.get("access_token")
 
     if not token:

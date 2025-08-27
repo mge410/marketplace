@@ -1,9 +1,7 @@
-version: '3.8'
-
 services:
   web:
     container_name: backend
-    build: marketplace
+    build: .
     ports:
       - "8000:8000"
     environment:

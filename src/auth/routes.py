@@ -6,9 +6,11 @@ from starlette import status
 from starlette.responses import JSONResponse
 
 from src.auth.dependencies import register_use_case, login_use_case
-from src.auth.exceptions.IncorrectPasswordException import IncorrectPasswordException
-from src.auth.exceptions.MultipleValidationException import MultipleValidationException
-from src.auth.exceptions.UserNotFoundException import UserNotFoundException
+from src.auth.exceptions.incorrect_password_exception import IncorrectPasswordException
+from src.auth.exceptions.multiple_validation_exception import (
+    MultipleValidationException,
+)
+from src.auth.exceptions.user_not_found_exception import UserNotFoundException
 from src.auth.schemes.login_user import LoginUserSchema, TokenInfo
 from src.auth.schemes.register_user import RegisterUserSchema
 from src.auth.use_cases.login import LoginUseCase

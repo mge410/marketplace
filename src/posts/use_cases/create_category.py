@@ -1,3 +1,4 @@
+from src.core.database import CategoryModel
 from src.posts.repositories.create_category import (
     CreateCategory as CreateCategoryRepository,
 )
@@ -8,5 +9,5 @@ class CreateCategory:
     def __init__(self, repository: CreateCategoryRepository):
         self.repository = repository
 
-    async def create_category(self, data: CreateCategorySchema) -> None:
-       await self.repository.create_category(data)
+    async def create_category(self, data: CreateCategorySchema) -> CategoryModel | None:
+        return await self.repository.create_category(data)
