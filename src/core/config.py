@@ -41,11 +41,12 @@ class FastStreamConfig(BaseModel):
 
 
 class S3Config(BaseModel):
-    endpoint_url: AnyUrl = AnyUrl("http://localstack:4566")
+    put_file_endpoint_url: AnyUrl = AnyUrl("http://localstack:4566")
+    get_file_endpoint_url: AnyUrl = AnyUrl("http://localhost:4566")
     region_name: str = "eu-central-1"
     aws_access_key_id: str = "dev_s3_id"
     aws_secret_access_key: str = "dev_s3_key"
-    bucket_name: str = "my-local-bucket"
+    bucket_name: str = "dev"
 
 
 class EmailConfig(BaseModel):

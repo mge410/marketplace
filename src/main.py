@@ -5,6 +5,7 @@ import uvicorn
 from fastapi import FastAPI
 
 from src.auth import auth_router
+from src.files.routes import file_router
 from src.posts import categories_router, posts_router
 from src.core.config import settings
 from src.core.database import db_helper
@@ -31,6 +32,7 @@ broker.include_router(subs_router)
 main_app.include_router(auth_router, prefix=settings.api.api_prefix)
 main_app.include_router(categories_router, prefix=settings.api.api_prefix)
 main_app.include_router(posts_router, prefix=settings.api.api_prefix)
+main_app.include_router(file_router, prefix=settings.api.api_prefix)
 
 if __name__ == "__main__":
     uvicorn.run(

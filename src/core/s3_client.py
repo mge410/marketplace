@@ -1,12 +1,13 @@
 from contextlib import asynccontextmanager
-from typing import Any, AsyncGenerator, Dict, Optional
+from typing import Any, AsyncGenerator, Dict, Optional, TYPE_CHECKING
 
 from aiobotocore.session import get_session
 from aiobotocore.config import AioConfig
 
 from src.core.config import settings, Environment
-from types_aiobotocore_s3 import S3Client as BaseS3Client
 
+if TYPE_CHECKING:
+    from types_aiobotocore_s3 import S3Client as BaseS3Client
 
 class S3Client:
     def __init__(
@@ -27,7 +28,7 @@ class S3Client:
         self.session = get_session()
 
     @asynccontextmanager
-    async def get_client(self) -> AsyncGenerator[BaseS3Client, Any]:
+    async def get_client(self) -> AsyncGenerator["BaseS3Client", Any]:
         if settings.app.environment.value == Environment.DEV.value:
             s3_config = AioConfig(
                 region_name=self.config["region_name"], s3={"addressing_style": "path"}

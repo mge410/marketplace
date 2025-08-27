@@ -17,6 +17,7 @@ from src.posts.dependencies import (
     get_list_of_posts_use_case,
     create_posts_use_case,
 )
+from src.posts.exceptions.category_does_not_exists import CategoryDoesNotExistsException
 from src.posts.schemes.category_schema import CategorySchema
 from src.posts.schemes.create_category_schema import CreateCategorySchema
 from src.posts.schemes.create_post_schema import CreatePostSchema
@@ -81,7 +82,7 @@ async def create_posts(
             content={"message": "Successfully created"},
             status_code=status.HTTP_201_CREATED,
         )
-    except CategoryAlreadyExistsException:
+    except CategoryDoesNotExistsException:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, detail="Category not found"
         )
