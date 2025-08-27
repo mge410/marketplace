@@ -10,7 +10,7 @@ from src.auth.exceptions.incorrect_password_exception import IncorrectPasswordEx
 from src.auth.exceptions.multiple_validation_exception import (
     MultipleValidationException,
 )
-from src.auth.exceptions.user_not_found_exception import UserNotFoundException
+from src.core.exceptions.user_not_found_exception import UserNotFoundException
 from src.auth.schemes.login_user import LoginUserSchema, TokenInfo
 from src.auth.schemes.register_user import RegisterUserSchema
 from src.auth.use_cases.login import LoginUseCase

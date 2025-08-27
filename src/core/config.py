@@ -1,9 +1,19 @@
+from enum import Enum
 from pathlib import Path
 
-from pydantic import PostgresDsn, BaseModel, AmqpDsn, EmailStr
+from pydantic import PostgresDsn, BaseModel, AmqpDsn, EmailStr, AnyUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+
+class Environment(Enum):
+    DEV = "DEV"
+    PROD = "PROD"
+
+
+class AppConfig(BaseModel):
+    environment: Environment = Environment.DEV
 
 
 class RunConfig(BaseModel):
@@ -28,6 +38,14 @@ class AuthJWT(BaseModel):
 class FastStreamConfig(BaseModel):
     url: AmqpDsn = AmqpDsn("amqp://guest:guest@rabbitmq:5672/")
     user_registered_event: str = "user-registered"
+
+
+class S3Config(BaseModel):
+    endpoint_url: AnyUrl = AnyUrl("http://localstack:4566")
+    region_name: str = "eu-central-1"
+    aws_access_key_id: str = "dev_s3_id"
+    aws_secret_access_key: str = "dev_s3_key"
+    bucket_name: str = "my-local-bucket"
 
 
 class EmailConfig(BaseModel):
@@ -58,12 +76,14 @@ class Settings(BaseSettings):
         env_nested_delimiter="__",
         env_prefix="APP_CONFIG__",
     )
+    app: AppConfig = AppConfig()
     email_config: EmailConfig = EmailConfig()
     run: RunConfig = RunConfig()
     api: ApiPrefix = ApiPrefix()
     db: DatabaseConfig
     faststream: FastStreamConfig = FastStreamConfig()
     auth_jwt: AuthJWT = AuthJWT()
+    s3_config: S3Config = S3Config()
 
 
 settings = Settings.model_validate({})

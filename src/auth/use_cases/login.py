@@ -1,8 +1,8 @@
 from src.auth.exceptions import IncorrectPasswordException
-from src.auth.exceptions import UserNotFoundException
 from src.auth.jwt import utils as jwt_utils
 from src.auth.repositories.login import LoginRepository
 from src.auth.schemes.login_user import LoginUserSchema, TokenInfo
+from src.core.exceptions import UserNotFoundException
 
 
 class LoginUseCase:

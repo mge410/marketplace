@@ -64,6 +64,32 @@ services:
       retries: 5
       start_period: 10s
 
+  localstack:
+    image: localstack/localstack
+    container_name: localstack
+    ports:
+      - "4566:4566"  # Основной порт для всех AWS сервисов
+      - "4510-4559:4510-4559"  # Диапазон портов для внешних сервисов (может понадобиться для некоторых функций)
+    environment:
+      - SERVICES=s3  # Укажите необходимые AWS сервисы через запятую (например, s3,sns,sqs)
+      - DEBUG=1  # Можно установить в 1 для подробного логирования при отладке
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - PERSISTENCE=1
+      - LS_LOG=info
+      - AWS_ACCESS_KEY_ID=dev_s3_id
+      - AWS_SECRET_ACCESS_KEY=dev_s3_key
+      - AWS_DEFAULT_REGION=eu-central-1
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"  # Для возможности создавать другие контейнеры (нужно для некоторых сервисов, например, Lambda)
+      - "./localstack_init_scripts:/etc/localstack/init/state.d"  # Папка с скриптами инициализации (например, для создания бакетов)
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:4566/_localstack/health" ]  # Или использовать awslocal
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+
 volumes:
   postgres_data:
   rabbitmq_data:
+  localstack_data:
