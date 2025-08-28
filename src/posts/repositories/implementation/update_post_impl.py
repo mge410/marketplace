@@ -6,7 +6,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.database import PostModel, CategoryModel
 from src.posts.exceptions.category_does_not_exists import CategoryDoesNotExistsException
-from src.posts.repositories.implementation.mixins.post_access_mixin import PostAccessMixin
+from src.posts.repositories.implementation.mixins.post_access_mixin import (
+    PostAccessMixin,
+)
 from src.posts.repositories.update_post import UpdatePost
 from src.posts.schemes.update_post_schema import UpdatePostSchema
 
@@ -17,10 +19,7 @@ class UpdatePostImpl(UpdatePost, PostAccessMixin):
         self.session = session
 
     async def update(
-            self,
-            post_id: int,
-            data: UpdatePostSchema,
-            author_id: UUID
+        self, post_id: int, data: UpdatePostSchema, author_id: UUID
     ) -> PostModel | None:
         post = await self._find_post_by_id(post_id)
         await self._check_author_access(post, author_id)
@@ -43,4 +42,6 @@ class UpdatePostImpl(UpdatePost, PostAccessMixin):
         try:
             category_result.scalar_one()
         except NoResultFound:
-            raise CategoryDoesNotExistsException(f"Category with id {category_id} not found")
+            raise CategoryDoesNotExistsException(
+                f"Category with id {category_id} not found"
+            )

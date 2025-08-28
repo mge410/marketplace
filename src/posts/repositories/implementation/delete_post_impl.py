@@ -5,7 +5,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.database.models.deleted_post_model import DeletedPostModel
 from src.posts.repositories.delete_post import DeletePost
-from src.posts.repositories.implementation.mixins.post_access_mixin import PostAccessMixin
+from src.posts.repositories.implementation.mixins.post_access_mixin import (
+    PostAccessMixin,
+)
 
 
 class DeletePostImpl(DeletePost, PostAccessMixin):

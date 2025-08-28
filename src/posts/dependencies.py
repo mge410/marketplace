@@ -49,11 +49,13 @@ def create_posts_use_case(
     repository = CreatePostImpl(session)
     return CreatePost(repository)
 
+
 def update_posts_use_case(
     session: AsyncSession = Depends(db_helper.get_session),
 ) -> UpdatePost:
     repository = UpdatePostImpl(session)
     return UpdatePost(repository)
+
 
 def delete_posts_use_case(
     session: AsyncSession = Depends(db_helper.get_session),

@@ -53,13 +53,9 @@ async def login(
         return token_info
 
     except UserNotFoundException as e:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=e.message
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=e.message)
     except IncorrectPasswordException as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail=e.message
-        )
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=e.message)
 
 
 @router.post("/logout")

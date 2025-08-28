@@ -8,9 +8,7 @@ class UpdatePost:
     def __init__(self, repository: UpdatePostRepository):
         self.repository = repository
 
-    async def update(self, post_id: int, data: UpdatePostSchema, author_id: UUID) -> None:
-        await self.repository.update(
-            post_id=post_id,
-            data=data,
-            author_id=author_id
-        )
+    async def update(
+        self, post_id: int, data: UpdatePostSchema, author_id: UUID
+    ) -> None:
+        await self.repository.update(post_id=post_id, data=data, author_id=author_id)
