@@ -13,11 +13,13 @@ from src.posts.repositories.implementation.get_list_of_categories_impl import (
 from src.posts.repositories.implementation.get_list_of_posts_impl import (
     GetListOfPostsImpl,
 )
+from src.posts.repositories.implementation.update_post_impl import UpdatePostImpl
 from src.posts.use_cases.create_category import CreateCategory
 from src.posts.use_cases.create_post import CreatePost
 from src.posts.use_cases.delete_post import DeletePost
 from src.posts.use_cases.get_list_of_categories import GetListOfCategories
 from src.posts.use_cases.get_list_of_posts import GetListOfPosts
+from src.posts.use_cases.update_post import UpdatePost
 
 
 def get_list_of_categories_use_case(
@@ -47,6 +49,11 @@ def create_posts_use_case(
     repository = CreatePostImpl(session)
     return CreatePost(repository)
 
+def update_posts_use_case(
+    session: AsyncSession = Depends(db_helper.get_session),
+) -> UpdatePost:
+    repository = UpdatePostImpl(session)
+    return UpdatePost(repository)
 
 def delete_posts_use_case(
     session: AsyncSession = Depends(db_helper.get_session),
