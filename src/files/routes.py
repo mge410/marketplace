@@ -10,17 +10,17 @@ from src.core.s3_client import S3Client
 
 file_router = APIRouter(prefix="/files", tags=["files"])
 
+
 def get_s3_client() -> S3Client:
     return S3Client()
 
 
 @file_router.post("/upload")
 async def upload_file(
-        file: UploadFile,
-        s3_client: S3Client = Depends(get_s3_client),
+    file: UploadFile,
+    s3_client: S3Client = Depends(get_s3_client),
 ) -> JSONResponse:
-
-    file_extension = os.path.splitext(file.filename)[1]
+    file_extension = os.path.splitext(str(file.filename))[1]
     object_name = f"{uuid.uuid4()}{file_extension}"
     temp_file_path = f"/tmp/{object_name}"
 
@@ -47,10 +47,10 @@ async def upload_file(
         )
 
     except Exception as e:
-        if 'temp_file_path' in locals() and os.path.exists(temp_file_path):
+        if "temp_file_path" in locals() and os.path.exists(temp_file_path):
             os.remove(temp_file_path)
 
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error uploading file: {str(e)}"
+            detail=f"Error uploading file: {str(e)}",
         )

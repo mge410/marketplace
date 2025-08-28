@@ -9,12 +9,13 @@ from src.core.config import settings, Environment
 if TYPE_CHECKING:
     from types_aiobotocore_s3 import S3Client as BaseS3Client
 
+
 class S3Client:
     def __init__(
         self,
         access_key: str = settings.s3_config.aws_access_key_id,
         secret_key: str = settings.s3_config.aws_secret_access_key,
-        endpoint_url: str = str(settings.s3_config.endpoint_url),
+        endpoint_url: str = str(settings.s3_config.put_file_endpoint_url),
         bucket_name: str = settings.s3_config.bucket_name,
         region_name: Optional[str] = settings.s3_config.region_name,
     ):

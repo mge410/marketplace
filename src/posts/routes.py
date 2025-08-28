@@ -16,14 +16,18 @@ from src.posts.dependencies import (
     get_list_of_categories_use_case,
     get_list_of_posts_use_case,
     create_posts_use_case,
+    delete_posts_use_case,
 )
 from src.posts.exceptions.category_does_not_exists import CategoryDoesNotExistsException
+from src.posts.exceptions.post_not_found_exception import PostNotFoundException
+from src.posts.exceptions.user_has_no_access_exception import UserHasNoAccessException
 from src.posts.schemes.category_schema import CategorySchema
 from src.posts.schemes.create_category_schema import CreateCategorySchema
 from src.posts.schemes.create_post_schema import CreatePostSchema
 from src.posts.schemes.posts_schema import PostSchema
 from src.posts.use_cases.create_category import CreateCategory
 from src.posts.use_cases.create_post import CreatePost
+from src.posts.use_cases.delete_post import DeletePost
 from src.posts.use_cases.get_list_of_categories import GetListOfCategories
 from src.posts.use_cases.get_list_of_posts import GetListOfPosts
 
@@ -62,14 +66,14 @@ async def create_category(
         )
 
 
-@categories_router.get("/posts", dependencies=[Depends(get_current_user)])
+@posts_router.get("/posts", dependencies=[Depends(get_current_user)])
 async def posts(
     use_case: Annotated[GetListOfPosts, Depends(get_list_of_posts_use_case)],
 ) -> List[PostSchema]:
     return await use_case.get_list_of_posts()
 
 
-@categories_router.post("/posts", dependencies=[Depends(get_current_user)])
+@posts_router.post("/posts")
 async def create_posts(
     data: CreatePostSchema,
     use_case: Annotated[CreatePost, Depends(create_posts_use_case)],
@@ -89,4 +93,32 @@ async def create_posts(
     except UserNotFoundException:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
+
+
+@posts_router.delete("/posts/{post_id}")
+async def delete_posts(
+    post_id: int,
+    use_case: Annotated[DeletePost, Depends(delete_posts_use_case)],
+    user: Annotated[UserSchema, Depends(get_current_user)],
+) -> JSONResponse:
+    try:
+        await use_case.delete(post_id, user.uuid)
+
+        return JSONResponse(
+            content={"message": "Successfully deleted"},
+            status_code=status.HTTP_201_CREATED,
+        )
+    except PostNotFoundException:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Post not found"
+        )
+    except UserNotFoundException:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
+    except UserHasNoAccessException:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only author can delete the post",
         )

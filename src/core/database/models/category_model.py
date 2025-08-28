@@ -7,6 +7,7 @@ from ..helpers.base_model import BaseModel
 
 if TYPE_CHECKING:
     from .. import PostModel
+    from . import DeletedPostModel
 
 
 class CategoryModel(BaseModel):
@@ -16,3 +17,6 @@ class CategoryModel(BaseModel):
     title: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
 
     posts: Mapped[list["PostModel"]] = relationship(back_populates="category")
+    deleted_posts: Mapped[list["DeletedPostModel"]] = relationship(
+        back_populates="category"
+    )

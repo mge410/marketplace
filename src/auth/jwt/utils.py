@@ -26,8 +26,8 @@ async def generate_token_info(
 ) -> str:
     return await encode_jwt_token(
         TokenPayload(
-            sub=user.uuid,
-            uuid=user.uuid,
+            sub=str(user.uuid),
+            uuid=str(user.uuid),
             email=user.email,
             name=user.name,
             phone=user.phone,
