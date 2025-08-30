@@ -1,7 +1,7 @@
 from enum import Enum
 from pathlib import Path
 
-from pydantic import PostgresDsn, BaseModel, AmqpDsn, EmailStr, AnyUrl
+from pydantic import PostgresDsn, BaseModel, AmqpDsn, EmailStr, AnyUrl, ConfigDict
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -10,6 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 class Environment(Enum):
     DEV = "DEV"
     PROD = "PROD"
+    TEST = "TEST"
 
 
 class AppConfig(BaseModel):

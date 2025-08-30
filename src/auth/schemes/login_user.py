@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, ConfigDict
 
 from src.core.config import settings
 
@@ -9,13 +9,14 @@ class LoginUserSchema(BaseModel):
         description="Пароль (6-16 символа)", min_length=6, max_length=16
     )
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "email": "user@example.com",
                 "password": "strongpassword123",
             }
         }
+    )
 
 
 class TokenPayload(BaseModel):

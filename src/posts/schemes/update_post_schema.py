@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class UpdatePostSchema(BaseModel):
@@ -7,8 +7,8 @@ class UpdatePostSchema(BaseModel):
     image_url: str
     category_id: int
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "title": "cats post",
                 "content": "cats post description",
@@ -16,3 +16,4 @@ class UpdatePostSchema(BaseModel):
                 "category_id": 1,
             }
         }
+    )

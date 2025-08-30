@@ -1,6 +1,6 @@
 import re
 
-from pydantic import Field, field_validator
+from pydantic import Field, field_validator, ConfigDict
 
 from src.auth.schemes.login_user import LoginUserSchema
 
@@ -21,8 +21,8 @@ class RegisterUserSchema(LoginUserSchema):
             )
         return value
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "email": "user@example.com",
                 "password": "strongpassword123",
@@ -30,3 +30,5 @@ class RegisterUserSchema(LoginUserSchema):
                 "name": "Иван Петров",
             }
         }
+    )
+

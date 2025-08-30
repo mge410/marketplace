@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class PostSchema(BaseModel):
@@ -13,8 +13,8 @@ class PostSchema(BaseModel):
     category_id: int
     category_title: str
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "id": 1,
                 "title": "cats post",
@@ -26,3 +26,5 @@ class PostSchema(BaseModel):
                 "category_title": "cats",
             }
         }
+    )
+
