@@ -20,11 +20,10 @@ class PostSchema(BaseModel):
                 "title": "cats post",
                 "content": "cats post description",
                 "image_url": "https://example.com/cat.jpg",
-                "created_at": datetime(2020, 1, 1),
-                "updated_at": datetime(2020, 1, 1),
+                "created_at": "2020-01-01T00:00:00",
+                "updated_at": "2020-01-01T00:00:00",
                 "category_id": 1,
                 "category_title": "cats",
             }
         }
     )
-

@@ -1,7 +1,7 @@
 from enum import Enum
 from pathlib import Path
 
-from pydantic import PostgresDsn, BaseModel, AmqpDsn, EmailStr, AnyUrl, ConfigDict
+from pydantic import PostgresDsn, BaseModel, AmqpDsn, EmailStr, AnyUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent

@@ -34,3 +34,5 @@ strict = true
 pythonpath = [
   "."
 ]
+[tool.ruff.lint]
+ignore = ["E402"]

@@ -1,16 +1,26 @@
 import pytest_asyncio
 from dotenv import find_dotenv, load_dotenv
 
-env_file = find_dotenv('.env.testing')
+env_file = find_dotenv(".env.testing")
 load_dotenv(env_file)
 
 from src.core.database import BaseModel, db_helper
 from src.core.config import settings, Environment
+from tests.posts.fixtures import (
+    mock_session,
+    mock_category,
+    mock_user,
+    author_id,
+    post_data,
+    category_data,
+)
 
-@pytest_asyncio.fixture(scope='session', autouse=True)
+
+@pytest_asyncio.fixture(scope="session", autouse=True)
 async def load_env() -> None:
     if settings.app.environment != Environment.TEST:
-        raise Exception('Wrong environment')
+        raise Exception("Wrong environment")
+
 
 @pytest_asyncio.fixture(scope="session", autouse=True)
 async def migrate_test_db() -> None:
@@ -18,4 +28,12 @@ async def migrate_test_db() -> None:
         await conn.run_sync(BaseModel.metadata.drop_all)
         await conn.run_sync(BaseModel.metadata.create_all)
 
-    yield "Test database"
+
+registered_fixtures = [
+    mock_session,
+    mock_category,
+    mock_user,
+    author_id,
+    post_data,
+    category_data,
+]
