@@ -11,8 +11,10 @@ from tests.posts.fixtures import (
     mock_category,
     mock_user,
     author_id,
-    post_data,
+    create_post_data_schema,
     category_data,
+    mock_post_model,
+    different_user,
 )
 
 
@@ -34,6 +36,8 @@ registered_fixtures = [
     mock_category,
     mock_user,
     author_id,
-    post_data,
+    create_post_data_schema,
     category_data,
+    mock_post_model,
+    different_user,
 ]

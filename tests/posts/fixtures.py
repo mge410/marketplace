@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from unittest.mock import MagicMock, AsyncMock, Mock
 from uuid import uuid4
 
@@ -13,11 +14,24 @@ async def mock_session() -> AsyncMock:
     session.add = Mock()
     session.commit = AsyncMock()
     session.refresh = AsyncMock()
+    session.delete = AsyncMock()
     return session
 
+@pytest_asyncio.fixture
+def mock_post_model():
+    post = MagicMock()
+    post.id = 1
+    post.title = "Test Post"
+    post.content = "Test content"
+    post.image_url = "http://example.com/image.jpg"
+    post.created_at = datetime.now(timezone.utc)
+    post.updated_at = datetime.now(timezone.utc)
+    post.category_id = 1
+    post.author_id = 1
+    return post
 
 @pytest_asyncio.fixture
-async def post_data():
+async def create_post_data_schema():
     return CreatePostSchema(
         title="Test Post",
         content="Test content",
@@ -38,6 +52,12 @@ async def mock_user():
     user.uuid = uuid4()
     return user
 
+@pytest_asyncio.fixture
+def different_user():
+    user = MagicMock()
+    user.id = 2
+    user.uuid = uuid4()
+    return user
 
 @pytest_asyncio.fixture
 async def mock_category():

@@ -11,7 +11,7 @@ from src.posts.repositories.implementation.create_post_impl import CreatePostImp
 class TestCreatePostRepository:
     @pytest.mark.asyncio
     async def test_create_post_success(
-        self, mock_session, post_data, author_id, mock_user, mock_category
+        self, mock_session, create_post_data_schema, author_id, mock_user, mock_category
     ):
         mock_session.execute.side_effect = [
             MagicMock(scalar_one_or_none=Mock(return_value=mock_category)),
@@ -19,17 +19,17 @@ class TestCreatePostRepository:
         ]
 
         repository = CreatePostImpl(mock_session)
-        result = await repository.create(post_data, author_id)
+        result = await repository.create(create_post_data_schema, author_id)
 
         assert mock_session.execute.await_count == 2
         mock_session.add.assert_called_once()
         mock_session.commit.assert_awaited_once()
         mock_session.refresh.assert_awaited_once()
-        await self._assert_post_model(mock_user, post_data, result)
+        await self._assert_post_model(mock_user, create_post_data_schema, result)
 
     @pytest.mark.asyncio
     async def test_create_post_category_not_exists(
-        self, mock_session, post_data, author_id
+        self, mock_session, create_post_data_schema, author_id
     ):
         mock_session.execute.return_value = MagicMock(
             scalar_one_or_none=Mock(return_value=None)
@@ -38,7 +38,7 @@ class TestCreatePostRepository:
         repository = CreatePostImpl(mock_session)
 
         with pytest.raises(CategoryDoesNotExistsException):
-            await repository.create(post_data, author_id)
+            await repository.create(create_post_data_schema, author_id)
 
         assert mock_session.execute.await_count == 1
         mock_session.add.assert_not_called()
@@ -47,7 +47,7 @@ class TestCreatePostRepository:
 
     @pytest.mark.asyncio
     async def test_create_post_user_not_exists(
-        self, mock_session, post_data, author_id, mock_category
+        self, mock_session, create_post_data_schema, author_id, mock_category
     ):
         mock_session.execute.side_effect = [
             MagicMock(scalar_one_or_none=Mock(return_value=mock_category)),
@@ -57,7 +57,7 @@ class TestCreatePostRepository:
         repository = CreatePostImpl(mock_session)
 
         with pytest.raises(UserNotFoundException):
-            await repository.create(post_data, author_id)
+            await repository.create(create_post_data_schema, author_id)
 
         assert mock_session.execute.await_count == 2
         mock_session.add.assert_not_called()
@@ -110,10 +110,10 @@ class TestCreatePostRepository:
             await repository._check_that_user_exists(author_id)
 
     @staticmethod
-    async def _assert_post_model(mock_user, post_data, result):
+    async def _assert_post_model(mock_user, create_post_data_schema, result):
         assert isinstance(result, PostModel)
-        assert result.title == post_data.title
-        assert result.content == post_data.content
-        assert result.image_url == post_data.image_url
-        assert result.category_id == post_data.category_id
+        assert result.title == create_post_data_schema.title
+        assert result.content == create_post_data_schema.content
+        assert result.image_url == create_post_data_schema.image_url
+        assert result.category_id == create_post_data_schema.category_id
         assert result.author_id == mock_user.id

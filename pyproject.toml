@@ -24,6 +24,7 @@ dev = [
     "mypy>=1.17.1",
     "pytest>=8.4.1",
     "pytest-asyncio>=1.1.0",
+    "pytest-cov>=6.2.1",
     "ruff>=0.12.8",
     "types-aiobotocore[full]>=2.24.1",
 ]
@@ -36,3 +37,10 @@ pythonpath = [
 ]
 [tool.ruff.lint]
 ignore = ["E402"]
+[tool.coverage.run]
+omit = [
+    "*/__init__.py",
+    "src/main.py",
+    "alembic/*",
+    "*/schemas/*"
+]
