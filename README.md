@@ -6,10 +6,11 @@
 Проект разворачивается при помощи docker.
 
 1. Копируем .env.example и создаём файл .env
-2. В папке certs нужно создать 2 файла - `jwt-private.pem` и `jwt-public.pem`. В файле Makefile есть команды для генерации этих файлов
+2. В папке certs нужно создать 2 файла - `jwt-private.pem` и `jwt-public.pem`. В файле Makefile есть команды для генерации этих файлов `gen-public-rsa` и `gen-private-rsa`
 3. Запускаем docker-compose up -d
-4. На http://localhost:8000 будет проект
+4. Входим в docker контейнер `docker exec -it backend /bin/bash` и применяем миграции `alembic upgrade head`
+5. На http://localhost:8000 будет проект
 
-Список endpoint можно будет посмотреть тут
+Список endpoint можно будет посмотреть тут, после развертки проекта
 
 http://localhost:8000/docs
