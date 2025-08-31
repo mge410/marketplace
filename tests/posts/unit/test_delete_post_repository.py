@@ -14,17 +14,19 @@ from src.posts.repositories.implementation.delete_post_impl import DeletePostImp
 class TestDeletePostImpl:
     @pytest.mark.asyncio
     async def test_delete_post_success(self, mock_session, mock_post_model, mock_user):
+        # prepare
         mock_session.execute.side_effect = [
             MagicMock(scalar_one=Mock(return_value=mock_post_model)),
-            MagicMock(scalar_one=Mock(return_value=mock_user))
+            MagicMock(scalar_one=Mock(return_value=mock_user)),
         ]
-
         repository = DeletePostImpl(mock_session)
         user_id = mock_user.uuid
 
+        # action
         await repository.delete(mock_post_model.id, user_id)
-        assert mock_session.execute.await_count == 2
 
+        # assert
+        assert mock_session.execute.await_count == 2
         mock_session.delete.assert_awaited_once_with(mock_post_model)
         mock_session.add.assert_called_once()
         added_args = mock_session.add.call_args[0]
@@ -40,110 +42,129 @@ class TestDeletePostImpl:
         assert deleted_post.category_id == mock_post_model.category_id
         assert deleted_post.author_id == mock_post_model.author_id
         assert deleted_post.deleted_at is not None
-
         mock_session.commit.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_delete_post_not_found(self, mock_session, mock_user):
+        # prepare
         mock_session.execute.side_effect = [
             MagicMock(scalar_one=Mock(side_effect=NoResultFound)),
-            MagicMock(scalar_one=Mock(return_value=mock_user))
+            MagicMock(scalar_one=Mock(return_value=mock_user)),
         ]
-
         repository = DeletePostImpl(mock_session)
         user_id = mock_user.uuid
 
+        # action
         with pytest.raises(PostNotFoundException):
             await repository.delete(999, user_id)
 
+        # assert
         mock_session.delete.assert_not_called()
         mock_session.add.assert_not_called()
         mock_session.commit.assert_not_awaited()
 
     @pytest.mark.asyncio
     async def test_delete_post_user_not_found(self, mock_session, mock_post_model):
+        # prepare
         mock_session.execute.side_effect = [
             MagicMock(scalar_one=Mock(return_value=mock_post_model)),
-            MagicMock(scalar_one=Mock(side_effect=NoResultFound))
+            MagicMock(scalar_one=Mock(side_effect=NoResultFound)),
         ]
-
         repository = DeletePostImpl(mock_session)
         user_id = uuid4()
 
+        # action
         with pytest.raises(UserNotFoundException):
             await repository.delete(mock_post_model.id, user_id)
 
+        # assert
         mock_session.delete.assert_not_called()
         mock_session.add.assert_not_called()
         mock_session.commit.assert_not_awaited()
 
     @pytest.mark.asyncio
-    async def test_delete_post_user_no_access(self, mock_session, mock_post_model, different_user):
+    async def test_delete_post_user_no_access(
+        self, mock_session, mock_post_model, different_user
+    ):
+        # prepare
         mock_session.execute.side_effect = [
             MagicMock(scalar_one=Mock(return_value=mock_post_model)),
-            MagicMock(scalar_one=Mock(return_value=different_user))
+            MagicMock(scalar_one=Mock(return_value=different_user)),
         ]
-
         repository = DeletePostImpl(mock_session)
         user_id = different_user.uuid
 
+        # action
         with pytest.raises(UserHasNoAccessException):
             await repository.delete(mock_post_model.id, user_id)
 
+        # assert
         mock_session.delete.assert_not_called()
         mock_session.add.assert_not_called()
         mock_session.commit.assert_not_awaited()
 
     @pytest.mark.asyncio
     async def test_find_post_by_id_success(self, mock_session, mock_post_model):
+        # prepare
         mock_session.execute.return_value = MagicMock(
             scalar_one=Mock(return_value=mock_post_model)
         )
-
         repository = DeletePostImpl(mock_session)
-        result = await repository._find_post_by_id(mock_post_model.id)
 
+        # action
+        result = await repository._find_post_by_id(mock_post_model.id)
+        # assert
         assert result == mock_post_model
 
     @pytest.mark.asyncio
     async def test_find_post_by_id_not_found(self, mock_session):
+        # prepare
         mock_session.execute.return_value = MagicMock(
             scalar_one=Mock(side_effect=NoResultFound)
         )
-
         repository = DeletePostImpl(mock_session)
 
+        # action & assert
         with pytest.raises(PostNotFoundException):
-            await repository._find_post_by_id(999)  # Несуществующий ID поста
+            await repository._find_post_by_id(999)
 
     @pytest.mark.asyncio
-    async def test_check_author_access_success(self, mock_session, mock_post_model, mock_user):
+    async def test_check_author_access_success(
+        self, mock_session, mock_post_model, mock_user
+    ):
+        # prepare
         mock_session.execute.return_value = MagicMock(
             scalar_one=Mock(return_value=mock_user)
         )
-
         repository = DeletePostImpl(mock_session)
 
+        # action & assert
         await repository._check_author_access(mock_post_model, mock_user.uuid)
 
     @pytest.mark.asyncio
-    async def test_check_author_access_user_not_found(self, mock_session, mock_post_model):
+    async def test_check_author_access_user_not_found(
+        self, mock_session, mock_post_model
+    ):
+        # prepare
         mock_session.execute.return_value = MagicMock(
             scalar_one=Mock(side_effect=NoResultFound)
         )
-
         repository = DeletePostImpl(mock_session)
 
+        # action & assert
         with pytest.raises(UserNotFoundException):
             await repository._check_author_access(mock_post_model, uuid4())
 
     @pytest.mark.asyncio
-    async def test_check_author_access_no_access(self, mock_session, mock_post_model, different_user):
+    async def test_check_author_access_no_access(
+        self, mock_session, mock_post_model, different_user
+    ):
+        # prepare
         mock_session.execute.return_value = MagicMock(
             scalar_one=Mock(return_value=different_user)
         )
-
         repository = DeletePostImpl(mock_session)
 
+        # action & assert
         with pytest.raises(UserHasNoAccessException):
             await repository._check_author_access(mock_post_model, different_user.uuid)

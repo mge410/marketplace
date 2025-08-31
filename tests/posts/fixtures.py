@@ -17,6 +17,7 @@ async def mock_session() -> AsyncMock:
     session.delete = AsyncMock()
     return session
 
+
 @pytest_asyncio.fixture
 def mock_post_model():
     post = MagicMock()
@@ -29,6 +30,7 @@ def mock_post_model():
     post.category_id = 1
     post.author_id = 1
     return post
+
 
 @pytest_asyncio.fixture
 async def create_post_data_schema():
@@ -52,12 +54,14 @@ async def mock_user():
     user.uuid = uuid4()
     return user
 
+
 @pytest_asyncio.fixture
 def different_user():
     user = MagicMock()
     user.id = 2
     user.uuid = uuid4()
     return user
+
 
 @pytest_asyncio.fixture
 async def mock_category():

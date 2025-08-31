@@ -46,11 +46,11 @@ async def upload_file(
             status_code=status.HTTP_201_CREATED,
         )
 
-    except Exception as e:
+    except Exception:
         if "temp_file_path" in locals() and os.path.exists(temp_file_path):
             os.remove(temp_file_path)
 
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error uploading file: {str(e)}",
+            detail="Error uploading file",
         )
