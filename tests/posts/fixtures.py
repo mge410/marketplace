@@ -3,9 +3,19 @@ from unittest.mock import MagicMock, AsyncMock, Mock
 from uuid import uuid4
 
 import pytest_asyncio
+from httpx import AsyncClient, ASGITransport
 
+from src.main import main_app
 from src.posts.schemes.create_category_schema import CreateCategorySchema
 from src.posts.schemes.create_post_schema import CreatePostSchema
+
+
+@pytest_asyncio.fixture(scope="session")
+async def async_client():
+    async with AsyncClient(
+        transport=ASGITransport(app=main_app), base_url="http://test"
+    ) as client:
+        yield client
 
 
 @pytest_asyncio.fixture

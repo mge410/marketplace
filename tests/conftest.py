@@ -15,6 +15,7 @@ from tests.posts.fixtures import (
     category_data,
     mock_post_model,
     different_user,
+    async_client,
 )
 
 
@@ -40,4 +41,5 @@ registered_fixtures = [
     category_data,
     mock_post_model,
     different_user,
+    async_client,
 ]
