@@ -18,13 +18,13 @@ async def test_register_success(async_client):
         user_data = {
             "email": "test@example.com",
             "password": "strongpassword123",
-            "phone": "+79123456789",
+            "phone": "+79998882211",
             "name": "Иван Петров",
         }
 
         # action
         response = await async_client.post("api/auth/register", json=user_data)
-
+        print(response.json())
         # assert
         assert response.status_code == status.HTTP_200_OK
         assert response.json() == {"success": True}
@@ -52,7 +52,7 @@ async def test_register_duplicate_email(async_client):
         user_data = {
             "email": "test@example.com",
             "password": "strongpassword123",
-            "phone": "+79123456789",
+            "phone": "+79998882211",
             "name": "Иван Петров",
         }
 
@@ -61,6 +61,7 @@ async def test_register_duplicate_email(async_client):
 
         # assert
         assert response.status_code == status.HTTP_400_BAD_REQUEST
+        print(response.json()["detail"][0]["field"])
         assert "email" in response.json()["detail"][0]["field"]
 
 
