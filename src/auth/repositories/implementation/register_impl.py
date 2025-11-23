@@ -1,4 +1,5 @@
 from typing import Optional
+from uuid import uuid4
 
 import bcrypt
 from sqlalchemy import select
@@ -24,6 +25,7 @@ class RegisterRepositoryImpl(RegisterRepository):
         await self._check_unique_user(user_data)
         user = UserModel(
             **user_data.model_dump(exclude={"password"}),
+            uuid=str(uuid4()),
             password=self._hash_password(password=user_data.password),
         )
         self.session.add(user)

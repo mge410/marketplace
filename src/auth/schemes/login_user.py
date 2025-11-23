@@ -6,7 +6,7 @@ from src.core.config import settings
 class LoginUserSchema(BaseModel):
     email: EmailStr = Field(description="Уникальный email пользователя")
     password: str = Field(
-        description="Пароль (6-16 символа)", min_length=6, max_length=16
+        description="Пароль (4-32 символа)", min_length=4, max_length=32
     )
 
     model_config = ConfigDict(
