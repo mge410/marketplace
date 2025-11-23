@@ -1,0 +1,33 @@
+import re
+
+from pydantic import Field, field_validator, ConfigDict
+
+from src.auth.schemes.login_user import LoginUserSchema
+
+
+class RegisterUserSchema(LoginUserSchema):
+    phone: str = Field(..., description="Уникальный номер телефона")
+    name: str = Field(
+        ..., description="Имя пользователя (2-25 символов)", min_length=2, max_length=25
+    )
+
+    @field_validator("phone")
+    @classmethod
+    def validate_phone(cls, value: str) -> str:
+        phone_regex = r"^(\+7|8)\d{10}$"
+        if not re.match(phone_regex, value):
+            raise ValueError(
+                "Номер телефона должен быть в формате +7XXXXXXXXXX или 8XXXXXXXXXX"
+            )
+        return value
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "email": "user@example.com",
+                "password": "strongpassword123",
+                "phone": "+79123456789",
+                "name": "Иван Петров",
+            }
+        }
+    )
