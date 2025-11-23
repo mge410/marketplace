@@ -21,10 +21,13 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "bandit>=1.9.1",
     "mypy>=1.17.1",
+    "pre-commit>=4.5.0",
     "pytest>=8.4.1",
     "pytest-asyncio>=1.1.0",
     "pytest-cov>=6.2.1",
+    "radon>=6.0.1",
     "ruff>=0.12.8",
     "types-aiobotocore[full]>=2.24.1",
 ]

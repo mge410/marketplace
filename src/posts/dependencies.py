@@ -13,6 +13,7 @@ from src.posts.repositories.implementation.get_list_of_categories_impl import (
 from src.posts.repositories.implementation.get_list_of_posts_impl import (
     GetListOfPostsImpl,
 )
+from src.posts.repositories.implementation.post_builder import PostBuilder
 from src.posts.repositories.implementation.update_post_impl import UpdatePostImpl
 from src.posts.use_cases.create_category import CreateCategory
 from src.posts.use_cases.create_post import CreatePost
@@ -46,7 +47,8 @@ def get_list_of_posts_use_case(
 def create_posts_use_case(
     session: AsyncSession = Depends(db_helper.get_session),
 ) -> CreatePost:
-    repository = CreatePostImpl(session)
+    builder = PostBuilder(session)
+    repository = CreatePostImpl(session, builder)
     return CreatePost(repository)
 
 

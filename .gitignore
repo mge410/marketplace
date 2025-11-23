@@ -214,3 +214,4 @@ __marimo__/
 /.env
 /certs/
 /localstack_init_scripts/
+.DS_Store

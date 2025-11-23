@@ -14,12 +14,20 @@ from src.core.fast_stream.fs_subs import router as subs_router
 from src.core.logger import setup_exception_handlers
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+async def start_services() -> None:
     await broker.start()
-    yield
+
+
+async def stop_services() -> None:
     await db_helper.dispose()
     await broker.stop()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    await start_services()
+    yield
+    await stop_services()
 
 
 main_app = FastAPI(
